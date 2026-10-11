@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NEON RP — Cinematic FX Preview</title>
+<style>
+:root{--red:#ff243f;--red2:#9f001a;--black:#050507;--glass:rgba(18,10,13,.72)}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#050507;color:#fff;font-family:Tahoma,Arial,sans-serif;overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;background:radial-gradient(ellipse at 75% 18%,#5e071b77,transparent 38%),radial-gradient(ellipse at 20% 80%,#b3002530,transparent 35%),linear-gradient(135deg,#08080b,#14050a 52%,#030304);z-index:-3}
+#fx{position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none}
+.scan{position:fixed;inset:0;pointer-events:none;z-index:4;background:repeating-linear-gradient(0deg,#fff0 0 3px,#ff243f05 4px);mix-blend-mode:screen}
+.vignette{position:fixed;inset:0;z-index:3;pointer-events:none;background:radial-gradient(ellipse,transparent 40%,#0009 100%)}
+header{position:relative;min-height:78vh;display:grid;place-items:center;text-align:center;padding:40px 20px;overflow:hidden}
+header:after{content:"";position:absolute;width:min(65vw,700px);aspect-ratio:1;border:1px solid #ff243f50;border-radius:50%;box-shadow:0 0 45px #ff183422,inset 0 0 45px #ff183422;animation:spin 32s linear infinite}
+.logo{font-size:clamp(3rem,9vw,7rem);font-weight:1000;letter-spacing:.09em;text-shadow:0 0 14px #ff1834,0 0 45px #a90022;animation:glow 3s ease-in-out infinite alternate}
+.sub{color:#ffb0bb;letter-spacing:.32em;font-size:clamp(.7rem,2vw,1rem)}
+.tag{display:inline-block;margin-top:24px;border:1px solid #ff243f80;background:#16060bc9;padding:12px 22px;border-radius:999px;box-shadow:0 0 25px #ff243f25}
+main{max-width:1100px;margin:auto;padding:24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px}
+.card{position:relative;min-height:185px;border:1px solid #ff243f45;border-radius:20px;padding:24px;background:linear-gradient(145deg,#19070dcf,#08080be8);overflow:hidden;transition:transform .25s,border-color .25s,box-shadow .25s;isolation:isolate}
+.card:before{content:"";position:absolute;inset:-80%;z-index:-1;background:conic-gradient(from 0deg,transparent,#ff243f45,transparent 25%);animation:spin 9s linear infinite}
+.card:hover{transform:translateY(-7px);border-color:#ff243f;box-shadow:0 12px 55px #ff243f26}
+.card h2{color:#ff4057}.card p{color:#d4bfc3;line-height:1.8}
+button{cursor:pointer;border:1px solid #ff4057;background:linear-gradient(120deg,#a40020,#f21b3a);color:white;padding:13px 18px;border-radius:12px;font-weight:bold;box-shadow:0 0 24px #ff183425}
+.controls{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;padding:0 20px 45px}
+footer{text-align:center;padding:35px 10px;color:#9b777e;border-top:1px solid #ff243f22;letter-spacing:.18em}
+@keyframes spin{to{transform:rotate(360deg)}}@keyframes glow{to{text-shadow:0 0 22px #ff1834,0 0 75px #ff183477;filter:brightness(1.3)}}@keyframes flicker{0%,97%,100%{opacity:1}98%{opacity:.6}99%{opacity:.85}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
+</style>
+</head><body>
+<canvas id="fx"></canvas><div class="scan"></div><div class="vignette"></div>
+<header><div><div class="sub">ROLEPLAY • IMMERSIVE EXPERIENCE</div><div class="logo">NEON RP</div><div class="sub">ENTER THE CITY. OWN YOUR STORY.</div><div class="tag">NEON SYSTEM // ACTIVE</div></div></header>
+<main>
+<section class="card"><h2>✦ Cinematic Glow</h2><p>توهج أحمر متدرج، عمق بصري، وحواف مضيئة بحركة ناعمة.</p></section>
+<section class="card"><h2>✧ Particle Field</h2><p>جزيئات ضوئية متحركة وخطوط سرعة تعمل على Canvas بدون مكتبات خارجية.</p></section>
+<section class="card"><h2>◈ Interactive Cards</h2><p>بطاقات زجاجية بلمعان متحرك وتأثير hover مناسب للكمبيوتر والموبايل.</p></section>
+<section class="card"><h2>⌁ Atmosphere</h2><p>طبقة مسح ضوئي خفيفة وتظليل سينمائي حول أطراف الشاشة.</p></section>
+</main>
+<div class="controls"><button id="burst">تفعيل انفجار الجزيئات</button><button id="toggle">إيقاف / تشغيل التأثيرات</button></div>
+<footer>NEON RP — ROLE PLAY</footer>
+<script>
+const c=document.getElementById('fx'),x=c.getContext('2d');let w,h,dpr,parts=[],active=true;
+function resize(){dpr=Math.min(devicePixelRatio||1,1.7);w=innerWidth;h=innerHeight;c.width=w*dpr;c.height=h*dpr;c.style.width=w+'px';c.style.height=h+'px';x.setTransform(dpr,0,0,dpr,0,0);parts=Array.from({length:Math.min(130,Math.floor(w*h/10000))},()=>make())}
+function make(burst=false){return {x:Math.random()*w,y:burst?h*.65+Math.random()*h*.25:Math.random()*h,vx:(Math.random()-.5)*(burst?5:.45),vy:-(Math.random()*(burst?7:1.2)+.15),r:Math.random()*(burst?3:2)+.5,a:Math.random()*.7+.15,life:burst?1:Math.random()}}
+function draw(){requestAnimationFrame(draw);if(!active)return;x.clearRect(0,0,w,h);for(let p of parts){p.x+=p.vx;p.y+=p.vy;p.life-=.0015;if(p.y<-10||p.x<-10||p.x>w+10||p.life<0)Object.assign(p,make());x.beginPath();x.arc(p.x,p.y,p.r,0,Math.PI*2);x.fillStyle=`rgba(255,${25+Math.random()*30|0},${45+Math.random()*30|0},${p.a})`;x.shadowBlur=12;x.shadowColor='#ff1834';x.fill()}x.shadowBlur=0}
+addEventListener('resize',resize);resize();draw();
+document.getElementById('burst').onclick=()=>{parts.push(...Array.from({length:160},()=>make(true)));parts=parts.slice(-360)};
+document.getElementById('toggle').onclick=()=>{active=!active;if(active)draw()};
+</script></body></html>
